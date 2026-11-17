@@ -1,0 +1,21 @@
+ydsh_dwd.dwd_order -- 订单事实表（已完成订单去重，按 order_month 分区）
+  order_id string, user_id string, store_id string, order_timestamp string, pay_amount double, discount_amount double, pay_type string, pay_name string, order_status string, channel string, order_month string, NULL NULL
+  分区字段: order_month
+ydsh_dwd.dim_product -- 商品维度表
+  product_id string, product_name string, category string, sub_category string, brand string, price double, cost double, status string, launch_date string
+ydsh_dwd.dim_store -- 门店维度表
+  store_id string, store_name string, province string, city string, district string, open_date string, area int, manager string
+ydsh_dwd.dim_user -- 用户维度表
+  user_id string, user_name string, gender string, age int, city string, province string, region string, register_date string, member_level string, level_name string, discount_rate double
+ydsh_dwd.dwd_order_item -- 订单明细表（一行=一个订单中的一个商品）
+  item_id string, order_id string, product_id string, quantity int, unit_price double, discount double
+ydsh_dws.dws_order_day -- DWS 日汇总表（全渠道）
+  dt string, orders bigint, gmv double, users bigint
+ydsh_ads.ads_sales_daily -- ADS 销售日报（含环比）
+  dt string, gmv double, orders bigint, aov double, users bigint, gmv_dod double
+ydsh_ads.ads_kpi_result -- ADS 全期核心 KPI 单行表
+  gmv double, orders bigint, aov double, active_users bigint, repurchase_rate double
+ydsh_ads.ads_category_top10 -- ADS 品类销售 Top10
+  category string, sales double, orders bigint
+ydsh_ads.ads_user_value -- ADS 用户价值分层
+  user_id string, order_cnt bigint, total_amount double, first_order_date string, last_order_date string, value_level string

@@ -1,0 +1,1252 @@
+{
+ "monthly_trend": [
+  {
+   "month": "2024-01",
+   "gmv": 1303664.8,
+   "orders": 489
+  },
+  {
+   "month": "2024-02",
+   "gmv": 1050884.62,
+   "orders": 432
+  },
+  {
+   "month": "2024-03",
+   "gmv": 1149147.58,
+   "orders": 469
+  },
+  {
+   "month": "2024-04",
+   "gmv": 1229111.16,
+   "orders": 469
+  },
+  {
+   "month": "2024-05",
+   "gmv": 1243184.51,
+   "orders": 495
+  },
+  {
+   "month": "2024-06",
+   "gmv": 1140695.07,
+   "orders": 443
+  },
+  {
+   "month": "2024-07",
+   "gmv": 1076607.84,
+   "orders": 448
+  },
+  {
+   "month": "2024-08",
+   "gmv": 1200980.79,
+   "orders": 498
+  },
+  {
+   "month": "2024-09",
+   "gmv": 1196345.06,
+   "orders": 474
+  },
+  {
+   "month": "2024-10",
+   "gmv": 1132194.2,
+   "orders": 481
+  },
+  {
+   "month": "2024-11",
+   "gmv": 1241706.14,
+   "orders": 473
+  },
+  {
+   "month": "2024-12",
+   "gmv": 1186692.91,
+   "orders": 471
+  }
+ ],
+ "category_sales": [
+  {
+   "category": "运动户外",
+   "sales": 26430234.61
+  },
+  {
+   "category": "数码家电",
+   "sales": 23750326.46
+  },
+  {
+   "category": "服饰鞋包",
+   "sales": 22634458.25
+  },
+  {
+   "category": "食品生鲜",
+   "sales": 21924784.27
+  },
+  {
+   "category": "图书文娱",
+   "sales": 21800710.71
+  },
+  {
+   "category": "美妆个护",
+   "sales": 21622762.6
+  },
+  {
+   "category": "家居生活",
+   "sales": 20611557.19
+  },
+  {
+   "category": "母婴玩具",
+   "sales": 18288329.54
+  }
+ ],
+ "province_sales": [
+  {
+   "province": "浙江省",
+   "sales": 1664656.8
+  },
+  {
+   "province": "湖南省",
+   "sales": 1492968.23
+  },
+  {
+   "province": "四川省",
+   "sales": 1342529.51
+  },
+  {
+   "province": "陕西省",
+   "sales": 1140841.88
+  },
+  {
+   "province": "辽宁省",
+   "sales": 1093986.95
+  },
+  {
+   "province": "河南省",
+   "sales": 1060197.57
+  },
+  {
+   "province": "江苏省",
+   "sales": 979138.54
+  },
+  {
+   "province": "重庆市",
+   "sales": 929665.89
+  },
+  {
+   "province": "福建省",
+   "sales": 909780.68
+  },
+  {
+   "province": "上海市",
+   "sales": 857093.97
+  },
+  {
+   "province": "山东省",
+   "sales": 702780.55
+  },
+  {
+   "province": "湖北省",
+   "sales": 687283.22
+  },
+  {
+   "province": "北京市",
+   "sales": 544169.31
+  },
+  {
+   "province": "安徽省",
+   "sales": 477060.52
+  },
+  {
+   "province": "广东省",
+   "sales": 269061.06
+  }
+ ],
+ "heatmap": [
+  {
+   "hour": "00",
+   "category": "图书文娱",
+   "qty": 274.0
+  },
+  {
+   "hour": "00",
+   "category": "家居生活",
+   "qty": 221.0
+  },
+  {
+   "hour": "00",
+   "category": "数码家电",
+   "qty": 246.0
+  },
+  {
+   "hour": "00",
+   "category": "服饰鞋包",
+   "qty": 325.0
+  },
+  {
+   "hour": "00",
+   "category": "母婴玩具",
+   "qty": 239.0
+  },
+  {
+   "hour": "00",
+   "category": "美妆个护",
+   "qty": 344.0
+  },
+  {
+   "hour": "00",
+   "category": "运动户外",
+   "qty": 377.0
+  },
+  {
+   "hour": "00",
+   "category": "食品生鲜",
+   "qty": 239.0
+  },
+  {
+   "hour": "01",
+   "category": "图书文娱",
+   "qty": 190.0
+  },
+  {
+   "hour": "01",
+   "category": "家居生活",
+   "qty": 249.0
+  },
+  {
+   "hour": "01",
+   "category": "数码家电",
+   "qty": 285.0
+  },
+  {
+   "hour": "01",
+   "category": "服饰鞋包",
+   "qty": 300.0
+  },
+  {
+   "hour": "01",
+   "category": "母婴玩具",
+   "qty": 191.0
+  },
+  {
+   "hour": "01",
+   "category": "美妆个护",
+   "qty": 239.0
+  },
+  {
+   "hour": "01",
+   "category": "运动户外",
+   "qty": 447.0
+  },
+  {
+   "hour": "01",
+   "category": "食品生鲜",
+   "qty": 309.0
+  },
+  {
+   "hour": "02",
+   "category": "图书文娱",
+   "qty": 236.0
+  },
+  {
+   "hour": "02",
+   "category": "家居生活",
+   "qty": 262.0
+  },
+  {
+   "hour": "02",
+   "category": "数码家电",
+   "qty": 267.0
+  },
+  {
+   "hour": "02",
+   "category": "服饰鞋包",
+   "qty": 267.0
+  },
+  {
+   "hour": "02",
+   "category": "母婴玩具",
+   "qty": 210.0
+  },
+  {
+   "hour": "02",
+   "category": "美妆个护",
+   "qty": 229.0
+  },
+  {
+   "hour": "02",
+   "category": "运动户外",
+   "qty": 319.0
+  },
+  {
+   "hour": "02",
+   "category": "食品生鲜",
+   "qty": 235.0
+  },
+  {
+   "hour": "03",
+   "category": "图书文娱",
+   "qty": 151.0
+  },
+  {
+   "hour": "03",
+   "category": "家居生活",
+   "qty": 214.0
+  },
+  {
+   "hour": "03",
+   "category": "数码家电",
+   "qty": 297.0
+  },
+  {
+   "hour": "03",
+   "category": "服饰鞋包",
+   "qty": 318.0
+  },
+  {
+   "hour": "03",
+   "category": "母婴玩具",
+   "qty": 212.0
+  },
+  {
+   "hour": "03",
+   "category": "美妆个护",
+   "qty": 187.0
+  },
+  {
+   "hour": "03",
+   "category": "运动户外",
+   "qty": 263.0
+  },
+  {
+   "hour": "03",
+   "category": "食品生鲜",
+   "qty": 192.0
+  },
+  {
+   "hour": "04",
+   "category": "图书文娱",
+   "qty": 243.0
+  },
+  {
+   "hour": "04",
+   "category": "家居生活",
+   "qty": 312.0
+  },
+  {
+   "hour": "04",
+   "category": "数码家电",
+   "qty": 270.0
+  },
+  {
+   "hour": "04",
+   "category": "服饰鞋包",
+   "qty": 266.0
+  },
+  {
+   "hour": "04",
+   "category": "母婴玩具",
+   "qty": 345.0
+  },
+  {
+   "hour": "04",
+   "category": "美妆个护",
+   "qty": 261.0
+  },
+  {
+   "hour": "04",
+   "category": "运动户外",
+   "qty": 308.0
+  },
+  {
+   "hour": "04",
+   "category": "食品生鲜",
+   "qty": 366.0
+  },
+  {
+   "hour": "05",
+   "category": "图书文娱",
+   "qty": 339.0
+  },
+  {
+   "hour": "05",
+   "category": "家居生活",
+   "qty": 233.0
+  },
+  {
+   "hour": "05",
+   "category": "数码家电",
+   "qty": 259.0
+  },
+  {
+   "hour": "05",
+   "category": "服饰鞋包",
+   "qty": 324.0
+  },
+  {
+   "hour": "05",
+   "category": "母婴玩具",
+   "qty": 209.0
+  },
+  {
+   "hour": "05",
+   "category": "美妆个护",
+   "qty": 314.0
+  },
+  {
+   "hour": "05",
+   "category": "运动户外",
+   "qty": 254.0
+  },
+  {
+   "hour": "05",
+   "category": "食品生鲜",
+   "qty": 250.0
+  },
+  {
+   "hour": "06",
+   "category": "图书文娱",
+   "qty": 190.0
+  },
+  {
+   "hour": "06",
+   "category": "家居生活",
+   "qty": 172.0
+  },
+  {
+   "hour": "06",
+   "category": "数码家电",
+   "qty": 220.0
+  },
+  {
+   "hour": "06",
+   "category": "服饰鞋包",
+   "qty": 226.0
+  },
+  {
+   "hour": "06",
+   "category": "母婴玩具",
+   "qty": 196.0
+  },
+  {
+   "hour": "06",
+   "category": "美妆个护",
+   "qty": 228.0
+  },
+  {
+   "hour": "06",
+   "category": "运动户外",
+   "qty": 316.0
+  },
+  {
+   "hour": "06",
+   "category": "食品生鲜",
+   "qty": 212.0
+  },
+  {
+   "hour": "07",
+   "category": "图书文娱",
+   "qty": 266.0
+  },
+  {
+   "hour": "07",
+   "category": "家居生活",
+   "qty": 303.0
+  },
+  {
+   "hour": "07",
+   "category": "数码家电",
+   "qty": 272.0
+  },
+  {
+   "hour": "07",
+   "category": "服饰鞋包",
+   "qty": 273.0
+  },
+  {
+   "hour": "07",
+   "category": "母婴玩具",
+   "qty": 190.0
+  },
+  {
+   "hour": "07",
+   "category": "美妆个护",
+   "qty": 215.0
+  },
+  {
+   "hour": "07",
+   "category": "运动户外",
+   "qty": 360.0
+  },
+  {
+   "hour": "07",
+   "category": "食品生鲜",
+   "qty": 284.0
+  },
+  {
+   "hour": "08",
+   "category": "图书文娱",
+   "qty": 325.0
+  },
+  {
+   "hour": "08",
+   "category": "家居生活",
+   "qty": 231.0
+  },
+  {
+   "hour": "08",
+   "category": "数码家电",
+   "qty": 266.0
+  },
+  {
+   "hour": "08",
+   "category": "服饰鞋包",
+   "qty": 222.0
+  },
+  {
+   "hour": "08",
+   "category": "母婴玩具",
+   "qty": 279.0
+  },
+  {
+   "hour": "08",
+   "category": "美妆个护",
+   "qty": 339.0
+  },
+  {
+   "hour": "08",
+   "category": "运动户外",
+   "qty": 429.0
+  },
+  {
+   "hour": "08",
+   "category": "食品生鲜",
+   "qty": 195.0
+  },
+  {
+   "hour": "09",
+   "category": "图书文娱",
+   "qty": 172.0
+  },
+  {
+   "hour": "09",
+   "category": "家居生活",
+   "qty": 199.0
+  },
+  {
+   "hour": "09",
+   "category": "数码家电",
+   "qty": 301.0
+  },
+  {
+   "hour": "09",
+   "category": "服饰鞋包",
+   "qty": 251.0
+  },
+  {
+   "hour": "09",
+   "category": "母婴玩具",
+   "qty": 133.0
+  },
+  {
+   "hour": "09",
+   "category": "美妆个护",
+   "qty": 196.0
+  },
+  {
+   "hour": "09",
+   "category": "运动户外",
+   "qty": 166.0
+  },
+  {
+   "hour": "09",
+   "category": "食品生鲜",
+   "qty": 171.0
+  },
+  {
+   "hour": "10",
+   "category": "图书文娱",
+   "qty": 277.0
+  },
+  {
+   "hour": "10",
+   "category": "家居生活",
+   "qty": 207.0
+  },
+  {
+   "hour": "10",
+   "category": "数码家电",
+   "qty": 278.0
+  },
+  {
+   "hour": "10",
+   "category": "服饰鞋包",
+   "qty": 130.0
+  },
+  {
+   "hour": "10",
+   "category": "母婴玩具",
+   "qty": 195.0
+  },
+  {
+   "hour": "10",
+   "category": "美妆个护",
+   "qty": 265.0
+  },
+  {
+   "hour": "10",
+   "category": "运动户外",
+   "qty": 314.0
+  },
+  {
+   "hour": "10",
+   "category": "食品生鲜",
+   "qty": 293.0
+  },
+  {
+   "hour": "11",
+   "category": "图书文娱",
+   "qty": 217.0
+  },
+  {
+   "hour": "11",
+   "category": "家居生活",
+   "qty": 257.0
+  },
+  {
+   "hour": "11",
+   "category": "数码家电",
+   "qty": 306.0
+  },
+  {
+   "hour": "11",
+   "category": "服饰鞋包",
+   "qty": 246.0
+  },
+  {
+   "hour": "11",
+   "category": "母婴玩具",
+   "qty": 227.0
+  },
+  {
+   "hour": "11",
+   "category": "美妆个护",
+   "qty": 228.0
+  },
+  {
+   "hour": "11",
+   "category": "运动户外",
+   "qty": 306.0
+  },
+  {
+   "hour": "11",
+   "category": "食品生鲜",
+   "qty": 193.0
+  },
+  {
+   "hour": "12",
+   "category": "图书文娱",
+   "qty": 258.0
+  },
+  {
+   "hour": "12",
+   "category": "家居生活",
+   "qty": 230.0
+  },
+  {
+   "hour": "12",
+   "category": "数码家电",
+   "qty": 247.0
+  },
+  {
+   "hour": "12",
+   "category": "服饰鞋包",
+   "qty": 212.0
+  },
+  {
+   "hour": "12",
+   "category": "母婴玩具",
+   "qty": 186.0
+  },
+  {
+   "hour": "12",
+   "category": "美妆个护",
+   "qty": 244.0
+  },
+  {
+   "hour": "12",
+   "category": "运动户外",
+   "qty": 226.0
+  },
+  {
+   "hour": "12",
+   "category": "食品生鲜",
+   "qty": 263.0
+  },
+  {
+   "hour": "13",
+   "category": "图书文娱",
+   "qty": 337.0
+  },
+  {
+   "hour": "13",
+   "category": "家居生活",
+   "qty": 298.0
+  },
+  {
+   "hour": "13",
+   "category": "数码家电",
+   "qty": 254.0
+  },
+  {
+   "hour": "13",
+   "category": "服饰鞋包",
+   "qty": 256.0
+  },
+  {
+   "hour": "13",
+   "category": "母婴玩具",
+   "qty": 143.0
+  },
+  {
+   "hour": "13",
+   "category": "美妆个护",
+   "qty": 212.0
+  },
+  {
+   "hour": "13",
+   "category": "运动户外",
+   "qty": 258.0
+  },
+  {
+   "hour": "13",
+   "category": "食品生鲜",
+   "qty": 249.0
+  },
+  {
+   "hour": "14",
+   "category": "图书文娱",
+   "qty": 216.0
+  },
+  {
+   "hour": "14",
+   "category": "家居生活",
+   "qty": 196.0
+  },
+  {
+   "hour": "14",
+   "category": "数码家电",
+   "qty": 296.0
+  },
+  {
+   "hour": "14",
+   "category": "服饰鞋包",
+   "qty": 359.0
+  },
+  {
+   "hour": "14",
+   "category": "母婴玩具",
+   "qty": 228.0
+  },
+  {
+   "hour": "14",
+   "category": "美妆个护",
+   "qty": 309.0
+  },
+  {
+   "hour": "14",
+   "category": "运动户外",
+   "qty": 371.0
+  },
+  {
+   "hour": "14",
+   "category": "食品生鲜",
+   "qty": 292.0
+  },
+  {
+   "hour": "15",
+   "category": "图书文娱",
+   "qty": 302.0
+  },
+  {
+   "hour": "15",
+   "category": "家居生活",
+   "qty": 209.0
+  },
+  {
+   "hour": "15",
+   "category": "数码家电",
+   "qty": 278.0
+  },
+  {
+   "hour": "15",
+   "category": "服饰鞋包",
+   "qty": 209.0
+  },
+  {
+   "hour": "15",
+   "category": "母婴玩具",
+   "qty": 151.0
+  },
+  {
+   "hour": "15",
+   "category": "美妆个护",
+   "qty": 203.0
+  },
+  {
+   "hour": "15",
+   "category": "运动户外",
+   "qty": 230.0
+  },
+  {
+   "hour": "15",
+   "category": "食品生鲜",
+   "qty": 244.0
+  },
+  {
+   "hour": "16",
+   "category": "图书文娱",
+   "qty": 170.0
+  },
+  {
+   "hour": "16",
+   "category": "家居生活",
+   "qty": 275.0
+  },
+  {
+   "hour": "16",
+   "category": "数码家电",
+   "qty": 199.0
+  },
+  {
+   "hour": "16",
+   "category": "服饰鞋包",
+   "qty": 220.0
+  },
+  {
+   "hour": "16",
+   "category": "母婴玩具",
+   "qty": 168.0
+  },
+  {
+   "hour": "16",
+   "category": "美妆个护",
+   "qty": 254.0
+  },
+  {
+   "hour": "16",
+   "category": "运动户外",
+   "qty": 280.0
+  },
+  {
+   "hour": "16",
+   "category": "食品生鲜",
+   "qty": 200.0
+  },
+  {
+   "hour": "17",
+   "category": "图书文娱",
+   "qty": 200.0
+  },
+  {
+   "hour": "17",
+   "category": "家居生活",
+   "qty": 319.0
+  },
+  {
+   "hour": "17",
+   "category": "数码家电",
+   "qty": 233.0
+  },
+  {
+   "hour": "17",
+   "category": "服饰鞋包",
+   "qty": 259.0
+  },
+  {
+   "hour": "17",
+   "category": "母婴玩具",
+   "qty": 237.0
+  },
+  {
+   "hour": "17",
+   "category": "美妆个护",
+   "qty": 198.0
+  },
+  {
+   "hour": "17",
+   "category": "运动户外",
+   "qty": 310.0
+  },
+  {
+   "hour": "17",
+   "category": "食品生鲜",
+   "qty": 187.0
+  },
+  {
+   "hour": "18",
+   "category": "图书文娱",
+   "qty": 202.0
+  },
+  {
+   "hour": "18",
+   "category": "家居生活",
+   "qty": 169.0
+  },
+  {
+   "hour": "18",
+   "category": "数码家电",
+   "qty": 217.0
+  },
+  {
+   "hour": "18",
+   "category": "服饰鞋包",
+   "qty": 281.0
+  },
+  {
+   "hour": "18",
+   "category": "母婴玩具",
+   "qty": 181.0
+  },
+  {
+   "hour": "18",
+   "category": "美妆个护",
+   "qty": 296.0
+  },
+  {
+   "hour": "18",
+   "category": "运动户外",
+   "qty": 230.0
+  },
+  {
+   "hour": "18",
+   "category": "食品生鲜",
+   "qty": 219.0
+  },
+  {
+   "hour": "19",
+   "category": "图书文娱",
+   "qty": 191.0
+  },
+  {
+   "hour": "19",
+   "category": "家居生活",
+   "qty": 212.0
+  },
+  {
+   "hour": "19",
+   "category": "数码家电",
+   "qty": 229.0
+  },
+  {
+   "hour": "19",
+   "category": "服饰鞋包",
+   "qty": 226.0
+  },
+  {
+   "hour": "19",
+   "category": "母婴玩具",
+   "qty": 288.0
+  },
+  {
+   "hour": "19",
+   "category": "美妆个护",
+   "qty": 158.0
+  },
+  {
+   "hour": "19",
+   "category": "运动户外",
+   "qty": 378.0
+  },
+  {
+   "hour": "19",
+   "category": "食品生鲜",
+   "qty": 251.0
+  },
+  {
+   "hour": "20",
+   "category": "图书文娱",
+   "qty": 370.0
+  },
+  {
+   "hour": "20",
+   "category": "家居生活",
+   "qty": 185.0
+  },
+  {
+   "hour": "20",
+   "category": "数码家电",
+   "qty": 227.0
+  },
+  {
+   "hour": "20",
+   "category": "服饰鞋包",
+   "qty": 248.0
+  },
+  {
+   "hour": "20",
+   "category": "母婴玩具",
+   "qty": 301.0
+  },
+  {
+   "hour": "20",
+   "category": "美妆个护",
+   "qty": 244.0
+  },
+  {
+   "hour": "20",
+   "category": "运动户外",
+   "qty": 326.0
+  },
+  {
+   "hour": "20",
+   "category": "食品生鲜",
+   "qty": 266.0
+  },
+  {
+   "hour": "21",
+   "category": "图书文娱",
+   "qty": 253.0
+  },
+  {
+   "hour": "21",
+   "category": "家居生活",
+   "qty": 273.0
+  },
+  {
+   "hour": "21",
+   "category": "数码家电",
+   "qty": 272.0
+  },
+  {
+   "hour": "21",
+   "category": "服饰鞋包",
+   "qty": 255.0
+  },
+  {
+   "hour": "21",
+   "category": "母婴玩具",
+   "qty": 206.0
+  },
+  {
+   "hour": "21",
+   "category": "美妆个护",
+   "qty": 280.0
+  },
+  {
+   "hour": "21",
+   "category": "运动户外",
+   "qty": 356.0
+  },
+  {
+   "hour": "21",
+   "category": "食品生鲜",
+   "qty": 204.0
+  },
+  {
+   "hour": "22",
+   "category": "图书文娱",
+   "qty": 186.0
+  },
+  {
+   "hour": "22",
+   "category": "家居生活",
+   "qty": 267.0
+  },
+  {
+   "hour": "22",
+   "category": "数码家电",
+   "qty": 316.0
+  },
+  {
+   "hour": "22",
+   "category": "服饰鞋包",
+   "qty": 204.0
+  },
+  {
+   "hour": "22",
+   "category": "母婴玩具",
+   "qty": 144.0
+  },
+  {
+   "hour": "22",
+   "category": "美妆个护",
+   "qty": 246.0
+  },
+  {
+   "hour": "22",
+   "category": "运动户外",
+   "qty": 308.0
+  },
+  {
+   "hour": "22",
+   "category": "食品生鲜",
+   "qty": 324.0
+  },
+  {
+   "hour": "23",
+   "category": "图书文娱",
+   "qty": 248.0
+  },
+  {
+   "hour": "23",
+   "category": "家居生活",
+   "qty": 188.0
+  },
+  {
+   "hour": "23",
+   "category": "数码家电",
+   "qty": 329.0
+  },
+  {
+   "hour": "23",
+   "category": "服饰鞋包",
+   "qty": 185.0
+  },
+  {
+   "hour": "23",
+   "category": "母婴玩具",
+   "qty": 259.0
+  },
+  {
+   "hour": "23",
+   "category": "美妆个护",
+   "qty": 229.0
+  },
+  {
+   "hour": "23",
+   "category": "运动户外",
+   "qty": 250.0
+  },
+  {
+   "hour": "23",
+   "category": "食品生鲜",
+   "qty": 266.0
+  }
+ ],
+ "pay_type": [
+  {
+   "name": "微信支付",
+   "count": 1529
+  },
+  {
+   "name": "支付宝",
+   "count": 1476
+  },
+  {
+   "name": "货到付款",
+   "count": 1336
+  },
+  {
+   "name": "银行卡",
+   "count": 1301
+  }
+ ],
+ "store_top10": [
+  {
+   "store": "云购生活·开封社区店",
+   "province": "河南省",
+   "sales": 585155.42,
+   "orders": 218
+  },
+  {
+   "store": "云购生活·北京二店",
+   "province": "北京市",
+   "sales": 544169.31,
+   "orders": 213
+  },
+  {
+   "store": "云购生活·莆田旗舰店",
+   "province": "福建省",
+   "sales": 484349.82,
+   "orders": 185
+  },
+  {
+   "store": "云购生活·青岛二店",
+   "province": "山东省",
+   "sales": 482918.68,
+   "orders": 198
+  },
+  {
+   "store": "云购生活·重庆一店",
+   "province": "重庆市",
+   "sales": 479887.2,
+   "orders": 202
+  },
+  {
+   "store": "云购生活·德阳购物中心店",
+   "province": "四川省",
+   "sales": 458668.04,
+   "orders": 183
+  },
+  {
+   "store": "云购生活·重庆社区店",
+   "province": "重庆市",
+   "sales": 449778.69,
+   "orders": 179
+  },
+  {
+   "store": "云购生活·西安一店",
+   "province": "陕西省",
+   "sales": 442368.14,
+   "orders": 182
+  },
+  {
+   "store": "云购生活·苏州旗舰店",
+   "province": "江苏省",
+   "sales": 287508.07,
+   "orders": 105
+  },
+  {
+   "store": "云购生活·岳阳购物中心店",
+   "province": "湖南省",
+   "sales": 284570.29,
+   "orders": 118
+  }
+ ],
+ "aov_discount": [
+  {
+   "aov": 2665.98,
+   "discount": 359.02
+  },
+  {
+   "aov": 2432.6,
+   "discount": 342.17
+  },
+  {
+   "aov": 2450.21,
+   "discount": 338.7
+  },
+  {
+   "aov": 2620.71,
+   "discount": 362.63
+  },
+  {
+   "aov": 2511.48,
+   "discount": 379.06
+  },
+  {
+   "aov": 2574.93,
+   "discount": 367.7
+  },
+  {
+   "aov": 2403.14,
+   "discount": 323.97
+  },
+  {
+   "aov": 2411.61,
+   "discount": 341.68
+  },
+  {
+   "aov": 2523.93,
+   "discount": 382.61
+  },
+  {
+   "aov": 2353.83,
+   "discount": 351.3
+  },
+  {
+   "aov": 2625.17,
+   "discount": 368.23
+  },
+  {
+   "aov": 2519.52,
+   "discount": 351.76
+  }
+ ]
+}

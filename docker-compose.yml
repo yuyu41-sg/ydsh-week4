@@ -1,0 +1,123 @@
+# 云购生活第4周 —— 可视化与部署环境一键编排
+# 服务：MySQL(元数据) + Hive Metastore + HiveServer2 + Superset + Streamlit 问答 App
+# 用法：
+#   1. 复制 .env.example 为 .env 并填入真实密钥（ZHIPU_API_KEY）
+#   2. docker compose up -d
+#   3. 首次启动执行数据初始化：bash sql/replay_all.sh && python sql/load_mysql.py
+#      （数据初始化后写入命名卷 hive-warehouse，之后重建容器不再丢失）
+#   4. python sql/superset_setup.py && python sql/superset_charts.py   # 注册数据源与图表
+#
+# 密钥安全：全部敏感信息经 .env 注入，本文件只有 ${VAR} 引用，无任何硬编码密钥。
+
+services:
+  mysql:
+    image: mysql:8.0
+    container_name: ydsh-mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD:-root}
+    ports:
+      - "3307:3306"
+    volumes:
+      - mysql-data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-p${MYSQL_ROOT_PASSWORD:-root}"]
+      interval: 10s
+      timeout: 5s
+      retries: 12
+    networks:
+      - ydsh-net
+
+  hive-metastore:
+    image: apache/hive:4.0.0
+    container_name: ydsh-metastore
+    depends_on:
+      mysql:
+        condition: service_healthy
+    environment:
+      SERVICE_NAME: metastore
+      METASTORE_DB_TYPE: mysql
+      METASTORE_DB_DRIVER: com.mysql.cj.jdbc.Driver
+      METASTORE_DB_HOST: mysql
+      METASTORE_DB_PORT: "3306"
+      METASTORE_DB_NAME: metastore
+      METASTORE_DB_USER: root
+      METASTORE_DB_PASSWORD: ${MYSQL_ROOT_PASSWORD:-root}
+    ports:
+      - "9083:9083"
+    volumes:
+      - ./data:/data
+    networks:
+      - ydsh-net
+
+  hive-server:
+    image: apache/hive:4.0.0
+    container_name: ydsh-hiveserver2
+    depends_on:
+      hive-metastore:
+        condition: service_started
+    environment:
+      SERVICE_NAME: hiveserver2
+      SERVICE_OPTS: "-Dhive.metastore.uris=thrift://hive-metastore:9083"
+      IS_RESUME: "true"
+    ports:
+      - "10000:10000"
+      - "10002:10002"
+    volumes:
+      - ./data:/data
+      - hive-warehouse:/opt/hive/data/warehouse   # 数仓数据持久化（命名卷，重建不丢）
+    healthcheck:
+      test: ["CMD-SHELL", "beeline -u jdbc:hive2://localhost:10000 -e 'SELECT 1' 2>/dev/null | grep -q '1 row'"]
+      interval: 20s
+      timeout: 30s
+      retries: 10
+      start_period: 90s
+    networks:
+      - ydsh-net
+
+  superset:
+    image: apache/superset:latest
+    container_name: superset
+    depends_on:
+      mysql:
+        condition: service_healthy
+      hive-server:
+        condition: service_healthy
+    environment:
+      SUPERSET_SECRET_KEY: ${SUPERSET_SECRET_KEY:-ydsh-week4-secret}
+    ports:
+      - "8088:8088"
+    volumes:
+      - superset-home:/app/superset_home
+    # 首次启动：装驱动 + 初始化 admin（幂等，重复执行无副作用）
+    command: >
+      bash -c "
+      uv pip install --system pyhive thrift thrift-sasl pymysql || true;
+      superset db upgrade && superset fab create-admin --username admin --firstname Admin --lastname User --email admin@example.com --password ${SUPERSET_ADMIN_PASSWORD:-admin} || true;
+      superset init;
+      gunicorn --workers 2 --bind 0.0.0.0:8088 'superset.app:create_app()'"
+    networks:
+      - ydsh-net
+
+  app:
+    build: ./app
+    container_name: ydsh-app
+    depends_on:
+      hive-server:
+        condition: service_healthy
+    environment:
+      ZHIPU_API_KEY: ${ZHIPU_API_KEY}          # 大模型密钥：.env 注入，不硬编码
+      ZHIPU_BASE_URL: ${ZHIPU_BASE_URL:-https://open.bigmodel.cn/api/paas/v4/}
+      ZHIPU_MODEL: ${ZHIPU_MODEL:-glm-4-flash}
+    ports:
+      - "8501:8501"
+    networks:
+      - ydsh-net
+
+volumes:
+  mysql-data:
+  hive-warehouse:
+  superset-home:
+
+networks:
+  ydsh-net:
+    driver: bridge
