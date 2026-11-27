@@ -78,6 +78,10 @@ services:
   superset:
     image: apache/superset:latest
     container_name: superset
+    # 必须以 root 运行：容器默认用户 superset(uid 1000) 对 /app/.venv 无写权限，
+    # 启动时装 Hive/MySQL 驱动会 Permission denied 且被 || true 吞掉，
+    # 导致重建后图表报 "Can't load plugin: sqlalchemy.dialects:hive"
+    user: root
     depends_on:
       mysql:
         condition: service_healthy
@@ -93,7 +97,8 @@ services:
     # 注意：新版镜像运行时用的是 /app/.venv，驱动必须装进 venv（--system 无效）
     command: >
       bash -c "
-      uv pip install --python /app/.venv/bin/python pyhive thrift thrift-sasl pymysql || true;
+      uv pip install --python /app/.venv/bin/python -i https://pypi.tuna.tsinghua.edu.cn/simple pyhive thrift thrift-sasl pymysql || true;
+      export UV_CACHE_DIR=/tmp/uv-cache;
       echo 'import pymysql; pymysql.install_as_MySQLdb()' > $(/app/.venv/bin/python -c 'import site; print(site.getsitepackages()[0])')/sitecustomize.py;
       superset db upgrade && superset fab create-admin --username admin --firstname Admin --lastname User --email admin@example.com --password ${SUPERSET_ADMIN_PASSWORD:-admin} || true;
       superset init;
