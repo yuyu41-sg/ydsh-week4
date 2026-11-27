@@ -174,10 +174,38 @@ def is_prediction_question(question: str) -> bool:
     q = (question or "").strip()
     return ("预测" in q or "预报" in q or "预估" in q) or ("未来" in q and "趋势" not in q)
 
+_CN_NUM = {"一": 1, "两": 2, "二": 2, "三": 3, "四": 4, "五": 5,
+           "六": 6, "七": 7, "八": 8, "九": 9, "十": 10, "半": 0}
+
+def _cn_to_int(s: str) -> int:
+    if s.isdigit():
+        return int(s)
+    return _CN_NUM.get(s.strip(), 1)
+
 def parse_forecast_days(question: str) -> int:
-    m = re.search(r"未来\s*(\d+)\s*[天日]", question or "")
-    d = int(m.group(1)) if m else 7
-    return max(1, min(d, 30))
+    q = question or ""
+    # 未来 N 天/日
+    m = re.search(r"未来\s*(\d+)\s*[天日]", q)
+    if m:
+        d = int(m.group(1))
+    else:
+        # 未来 N 个月
+        m = re.search(r"未来\s*([0-9]+|[一二两三四五六七八九十半]+)\s*个?\s*月", q)
+        if m:
+            d = _cn_to_int(m.group(1)) * 30
+        else:
+            # 未来 N 周/星期
+            m = re.search(r"未来\s*([0-9]+|[一二两三四五六七八九十半]+)\s*个?\s*(?:周|星期)", q)
+            if m:
+                d = _cn_to_int(m.group(1)) * 7
+            else:
+                # 未来一个月/一周/一天（无数字）
+                m = re.search(r"未来一\s*个?\s*(月|周|星期|天|日)", q)
+                if m:
+                    d = {"月": 30, "周": 7, "星期": 7, "天": 1, "日": 1}[m.group(1)]
+                else:
+                    d = 7
+    return max(1, min(d, 60))
 
 def predict_sales(days: int = 7):
     """从 Hive 实查每日 GMV，滞后特征+线性回归迭代预测未来 N 天。
