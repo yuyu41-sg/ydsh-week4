@@ -50,13 +50,16 @@ SYSTEM_PROMPT = f"""你是 Hive SQL 专家。根据用户的自然语言问题�
 5. "销售额/GMV"默认口径为已完成订单的 pay_amount 之和（order_status = '已完成'）；涉及品类销量时用 dwd_order_item 关联 dim_product。
 6. 省份/城市等维度在 dim_store / dim_user 表中，注意关联键。
 7. 结果限制在 50 行以内（必要时加 LIMIT）。
-8. GROUP BY / HAVING 中必须重复完整表达式，禁止使用 SELECT 别名（Hive 不支持别名分组）；ORDER BY 中可用别名但优先写表达式。
+8. GROUP BY / ORDER BY / HAVING 中必须重复完整表达式或原始列名，严格禁止使用 SELECT 别名（Hive 不支持别名分组与别名排序）。
+9. dwd_order 已有分区列 order_month（格式 'yyyy-MM'），月度/季度趋势直接 GROUP BY order_month，禁止用 SUBSTR 拆分。
 
 示例（few-shot）：
 问："广东省的销售额是多少"
 答：SELECT ROUND(SUM(o.pay_amount),2) AS sales FROM ydsh_dwd.dwd_order o JOIN ydsh_dwd.dim_store s ON o.store_id=s.store_id WHERE s.province='广东省' AND o.order_status='已完成';
 问："销量最高的前5个品类"
-答：SELECT p.category, SUM(i.quantity) AS total_qty FROM ydsh_dwd.dwd_order_item i JOIN ydsh_dwd.dim_product p ON i.product_id=p.product_id JOIN ydsh_dwd.dwd_order o ON i.order_id=o.order_id AND o.order_status='已完成' GROUP BY p.category ORDER BY total_qty DESC LIMIT 5;
+答：SELECT p.category, SUM(i.quantity) AS total_qty FROM ydsh_dwd.dwd_order_item i JOIN ydsh_dwd.dim_product p ON i.product_id=p.product_id JOIN ydsh_dwd.dwd_order o ON i.order_id=o.order_id AND o.order_status='已完成' GROUP BY p.category ORDER BY SUM(i.quantity) DESC LIMIT 5;
+问："2024年每月的GMV和订单量趋势"
+答：SELECT o.order_month, ROUND(SUM(o.pay_amount),2) AS gmv, COUNT(DISTINCT o.order_id) AS order_cnt FROM ydsh_dwd.dwd_order o WHERE o.order_month LIKE '2024%' AND o.order_status='已完成' GROUP BY o.order_month ORDER BY o.order_month;
 
 只输出 SQL 本身，不要任何解释。"""
 
@@ -84,9 +87,32 @@ def validate_sql(sql: str):
     if not sql.lower().lstrip().startswith("select"):
         raise ValueError("非 SELECT 语句，已拦截")
 
+def _run_sql_pyhive(sql: str):
+    """容器内执行：pyhive 直连 HiveServer2（容器里没有 docker CLI）"""
+    from pyhive import hive
+    conn = hive.connect(host=os.environ.get("HIVE_HOST", "hive-server"),
+                        port=10000, database="default", username="hive", auth="NONE")
+    try:
+        cursor = conn.cursor()
+        cursor.execute(sql)
+        header = [(d[0].split(".")[-1] if d[0] else "col") for d in cursor.description]
+        rows = ["\t".join(header)]
+        for vals in cursor.fetchall():
+            rows.append("\t".join("" if v is None else str(v) for v in vals))
+        return rows
+    finally:
+        conn.close()
+
 def run_sql(sql: str):
     """在 Hive 上执行并返回 (结果行, 错误信息)"""
     sql = sql.rstrip(";")
+    if os.path.exists("/.dockerenv"):
+        # Docker 容器内运行：直连 HiveServer2
+        try:
+            return _run_sql_pyhive(sql), None
+        except Exception as e:
+            return [], str(e)
+    # 宿主机运行：经 docker exec 调 beeline
     cmd = ["docker", "exec", "ydsh-hiveserver2", "bash", "-c",
            f"beeline -u jdbc:hive2://localhost:10000 --outputformat=tsv2 --silent=true -e \"{sql}\" 2>&1"]
     env = os.environ.copy(); env["MSYS_NO_PATHCONV"] = "1"
@@ -138,3 +164,65 @@ if __name__ == "__main__":
     print(f"【执行结果】(共{len(rows)}行)" + (f"，经{retries}次自修复" if retries else ""))
     for r in rows[:12]:
         print(" ", r)
+
+# ---------- 时序预测：预测类问题不走 SQL，改走预测模型（第3周 predict_gmv 方案） ----------
+# 设计原因：NL2SQL 只能生成 SELECT 查历史，无法做时序外推；
+# 预测类问题（含"预测/预报/未来N天"）路由到本模块：Hive 实查 dws_order_day 日 GMV →
+# 滞后特征（lag1/lag7/ma7/星期几）+ 线性回归 → 迭代预测未来 N 天。
+
+def is_prediction_question(question: str) -> bool:
+    q = (question or "").strip()
+    return ("预测" in q or "预报" in q or "预估" in q) or ("未来" in q and "趋势" not in q)
+
+def parse_forecast_days(question: str) -> int:
+    m = re.search(r"未来\s*(\d+)\s*[天日]", question or "")
+    d = int(m.group(1)) if m else 7
+    return max(1, min(d, 30))
+
+def predict_sales(days: int = 7):
+    """从 Hive 实查每日 GMV，滞后特征+线性回归迭代预测未来 N 天。
+    返回 (hist_df, pred_df, metrics)；与第3周 predict_gmv.py 同一方法。"""
+    import numpy as np
+    import pandas as pd
+    from sklearn.linear_model import LinearRegression
+
+    rows, err = run_sql("SELECT dt, gmv FROM ydsh_dws.dws_order_day ORDER BY dt")
+    if err or len(rows) < 15:
+        raise RuntimeError(f"预测所需历史数据查询失败：{err or '数据行不足'}")
+    df = pd.DataFrame([r.split("\t") for r in rows[1:]], columns=["dt", "gmv"])
+    df["dt"] = pd.to_datetime(df["dt"])
+    df["gmv"] = pd.to_numeric(df["gmv"])
+    df = df.sort_values("dt").reset_index(drop=True)
+
+    FEATURES = ["lag1", "lag7", "ma7", "dow"]
+    feat_df = df.set_index("dt")
+    feat_df["lag1"] = feat_df["gmv"].shift(1)
+    feat_df["lag7"] = feat_df["gmv"].shift(7)
+    feat_df["ma7"] = feat_df["gmv"].shift(1).rolling(7).mean()
+    feat_df["dow"] = feat_df.index.day_of_week
+    feat = feat_df.dropna()
+
+    # 留出最后 30 天做评估（与第3周报告口径一致）
+    split_date = feat.index[-min(30, len(feat) - 1)]
+    train, test = feat[feat.index < split_date], feat[feat.index >= split_date]
+    model = LinearRegression().fit(train[FEATURES], train["gmv"])
+    test_pred = model.predict(test[FEATURES])
+    mape = float(np.mean(np.abs((test["gmv"] - test_pred) / test["gmv"])) * 100)
+
+    # 全量重训后迭代预测未来 N 天
+    model = LinearRegression().fit(feat[FEATURES], feat["gmv"])
+    hist = df["gmv"].tolist()
+    future_dates = pd.date_range(df["dt"].iloc[-1] + pd.Timedelta(days=1), periods=days)
+    preds = []
+    for d in future_dates:
+        p = float(model.predict(pd.DataFrame(
+            [[hist[-1], hist[-7], float(np.mean(hist[-7:])), d.day_of_week]],
+            columns=FEATURES))[0])
+        preds.append(p)
+        hist.append(p)
+
+    hist_df = df[["dt", "gmv"]]
+    pred_df = pd.DataFrame({"dt": future_dates.date, "pred_gmv": [round(p, 2) for p in preds]})
+    metrics = {"mape": round(mape, 1), "total": round(sum(preds), 2),
+               "daily_avg": round(float(np.mean(preds)), 0), "data_days": len(df)}
+    return hist_df, pred_df, metrics
