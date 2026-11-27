@@ -64,6 +64,7 @@ services:
       - "10002:10002"
     volumes:
       - ./data:/data
+      - ../ydsh-week1/sql:/sql:ro                  # week1 的 ODS/清洗 SQL 脚本（replay_all.sh 依赖）
       - hive-warehouse:/opt/hive/data/warehouse   # 数仓数据持久化（命名卷，重建不丢）
     healthcheck:
       test: ["CMD-SHELL", "beeline -u jdbc:hive2://localhost:10000 -e 'SELECT 1' 2>/dev/null | grep -q '1 row'"]
@@ -89,9 +90,11 @@ services:
     volumes:
       - superset-home:/app/superset_home
     # 首次启动：装驱动 + 初始化 admin（幂等，重复执行无副作用）
+    # 注意：新版镜像运行时用的是 /app/.venv，驱动必须装进 venv（--system 无效）
     command: >
       bash -c "
-      uv pip install --system pyhive thrift thrift-sasl pymysql || true;
+      uv pip install --python /app/.venv/bin/python pyhive thrift thrift-sasl pymysql || true;
+      echo 'import pymysql; pymysql.install_as_MySQLdb()' > $(/app/.venv/bin/python -c 'import site; print(site.getsitepackages()[0])')/sitecustomize.py;
       superset db upgrade && superset fab create-admin --username admin --firstname Admin --lastname User --email admin@example.com --password ${SUPERSET_ADMIN_PASSWORD:-admin} || true;
       superset init;
       gunicorn --workers 2 --bind 0.0.0.0:8088 'superset.app:create_app()'"

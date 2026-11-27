@@ -61,13 +61,22 @@ def ensure_chart(slice_name, viz_type, ds_id, form_extra):
 
 login()
 # ---------- 数据集 ----------
-ds_kpi   = ensure_dataset(2, "ydsh_ads", "ads_kpi_result")        # Hive
-ds_daily = ensure_dataset(2, "ydsh_ads", "ads_sales_daily")       # Hive
-ds_month = ensure_dataset(1, "ydsh_ads", "monthly_trend")         # MySQL
-ds_cat   = ensure_dataset(1, "ydsh_ads", "category_sales")        # MySQL
-ds_prov  = ensure_dataset(1, "ydsh_ads", "province_sales")        # MySQL
-ds_pay   = ensure_dataset(1, "ydsh_ads", "pay_type")              # MySQL
-ds_top   = ensure_dataset(1, "ydsh_ads", "store_top10")           # MySQL
+# 按名称解析数据源 id（容器/卷重建后自增 id 可能变化，勿硬编码）
+def db_id(name):
+    q = {"q": f'(filters:!((col:database_name,opr:eq,value:{name})))'}
+    r = s.get(f"{SUPERSET}/api/v1/database/", timeout=30, params=q)
+    return r.json()["result"][0]["id"]
+
+HIVE_ID, MYSQL_ID = db_id("ydsh_hive"), db_id("ydsh_mysql")
+print("数据源 id: hive=%d mysql=%d" % (HIVE_ID, MYSQL_ID))
+
+ds_kpi   = ensure_dataset(HIVE_ID, "ydsh_ads", "ads_kpi_result")      # Hive
+ds_daily = ensure_dataset(HIVE_ID, "ydsh_ads", "ads_sales_daily")     # Hive
+ds_month = ensure_dataset(MYSQL_ID, "ydsh_ads", "monthly_trend")      # MySQL
+ds_cat   = ensure_dataset(MYSQL_ID, "ydsh_ads", "category_sales")     # MySQL
+ds_prov  = ensure_dataset(MYSQL_ID, "ydsh_ads", "province_sales")     # MySQL
+ds_pay   = ensure_dataset(MYSQL_ID, "ydsh_ads", "pay_type")           # MySQL
+ds_top   = ensure_dataset(MYSQL_ID, "ydsh_ads", "store_top10")        # MySQL
 print("数据集:", ds_kpi, ds_daily, ds_month, ds_cat, ds_prov, ds_pay, ds_top)
 
 # ---------- 图表 ----------
@@ -125,18 +134,45 @@ charts.append(ensure_chart("⑥ 门店TopN-排行表", "table", ds_top, {
 print("图表ID:", charts)
 
 # ---------- 仪表板 ----------
+# 注意：6.x 的 POST/PUT 仪表板不接受 slices 字段，必须用 position_json 挂载；
+# 且 ROOT 下必须有 TABS 包裹层，ROW 的 children 必须是字符串 id（不是 dict）
+def chart_node(cid, w, h):
+    return {"type": "CHART", "id": f"CHART-{cid}", "chartId": cid,
+            "meta": {"width": w, "height": h, "chartId": cid, "slice_id": cid}}
+
+def row(rid, *cids):
+    return {"type": "ROW", "id": rid, "children": list(cids),
+            "meta": {"background": "BACKGROUND_TRANSPARENT"}}
+
+rows = [row("ROW-1", "CHART-1"),
+        row("ROW-2", "CHART-2"),
+        row("ROW-3", "CHART-3", "CHART-4"),
+        row("ROW-4", "CHART-5", "CHART-6")]
+chart_nodes = [chart_node(1, 12, 40), chart_node(2, 12, 60),
+               chart_node(3, 6, 55), chart_node(4, 6, 55),
+               chart_node(5, 6, 55), chart_node(6, 6, 55)]
+layout = {
+    "DASHBOARD_VERSION_KEY": "v2",
+    "ROOT_ID": {"type": "ROOT", "id": "ROOT", "children": ["TABS-ydsh"]},
+    "TABS-ydsh": {"type": "TABS", "id": "TABS-ydsh", "children": ["GRID_ID"], "meta": {}},
+    "GRID_ID": {"type": "GRID", "id": "GRID_ID", "children": [r["id"] for r in rows], "meta": {}},
+}
+for n in rows + chart_nodes:
+    layout[n["id"]] = n
+
 q = {"q": '(filters:!((col:dashboard_title,opr:eq,value:云购生活经营分析仪表板)))'}
 r = s.get(f"{SUPERSET}/api/v1/dashboard/", timeout=30, params=q)
 items = r.json().get("result", [])
 if items:
     did = items[0]["id"]
     s.put(f"{SUPERSET}/api/v1/dashboard/{did}", timeout=60,
-          json={"slices": charts})
+          json={"position_json": json.dumps(layout), "published": True})
     print(f"已更新仪表板 (id={did})，挂载 {len(charts)} 个图表")
 else:
     r = s.post(f"{SUPERSET}/api/v1/dashboard/", timeout=60,
                json={"dashboard_title": "云购生活经营分析仪表板",
-                     "slices": charts})
+                     "published": True, "owners": [],
+                     "position_json": json.dumps(layout)})
     r.raise_for_status()
     did = r.json()["id"]
     print(f"已创建仪表板 (id={did})，挂载 {len(charts)} 个图表")
