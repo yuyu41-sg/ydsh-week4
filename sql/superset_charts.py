@@ -7,6 +7,8 @@
 用法：python sql/superset_charts.py
 """
 import json
+import os
+import subprocess
 import requests
 
 SUPERSET = "http://localhost:8088"
@@ -176,5 +178,25 @@ else:
     r.raise_for_status()
     did = r.json()["id"]
     print(f"已创建仪表板 (id={did})，挂载 {len(charts)} 个图表")
+
+# 6.x REST API 不会从 position_json 自动同步 slices 关系（缺失时前端报
+# "no chart definition associated"），需 ORM 补挂一次（幂等）
+orm_code = f'''
+from superset.app import create_app
+app = create_app()
+with app.app_context():
+    from superset.extensions import db
+    from superset.models.dashboard import Dashboard
+    from superset.models.slice import Slice
+    dash = db.session.query(Dashboard).get({did})
+    dash.slices = db.session.query(Slice).filter(Slice.id.in_({charts})).all()
+    db.session.commit()
+    print("ORM attach:", len(dash.slices), "charts")
+'''
+tmp = os.path.join(os.environ.get("TEMP", "/tmp"), "_attach_charts.py")
+open(tmp, "w", encoding="utf-8").write(orm_code)
+subprocess.run(["docker", "cp", tmp, "superset:/tmp/_attach_charts.py"], check=False)
+subprocess.run(["docker", "exec", "-u", "root", "superset",
+                "/app/.venv/bin/python", "/tmp/_attach_charts.py"], check=False)
 
 print("\n完成。浏览器打开 http://localhost:8088 （admin/admin）查看仪表板")
